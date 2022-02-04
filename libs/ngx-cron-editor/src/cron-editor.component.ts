@@ -4,7 +4,6 @@ import { Days, MonthWeeks, Months } from './enums';
 import { ControlContainer, ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 
-
 export const CRON_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
   // eslint:disable-next-line:no-use-before-declare
@@ -45,21 +44,23 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
 
   public selectedIndex: number;
 
+  public cronForm: FormControl;
+
+  public minutesForm: FormGroup;
+  public hourlyForm: FormGroup;
+  public dailyForm: FormGroup;
+  public weeklyForm: FormGroup;
+  public monthlyForm: FormGroup;
+  public yearlyForm: FormGroup;
+  public advancedForm: FormGroup;
+
   private localCron = '0 0 1/1 * *';
   private isDirty: boolean;
 
   private tabs: string[] = [];
 
-  cronForm: FormControl;
-
-  minutesForm: FormGroup;
-  hourlyForm: FormGroup;
-  dailyForm: FormGroup;
-  weeklyForm: FormGroup;
-  monthlyForm: FormGroup;
-  yearlyForm: FormGroup;
-  advancedForm: FormGroup;
-
+  public constructor(private fb: FormBuilder) {
+  }
 
   get isCronFlavorQuartz() {
     return this.options.cronFlavor === 'quartz';
@@ -79,10 +80,6 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
 
   get monthDayDefaultChar() {
     return this.options.cronFlavor === 'quartz' ? '?' : '*';
-  }
-
-
-  constructor(private fb: FormBuilder) {
   }
 
   /* Update the cron output to that of the selected tab.
@@ -229,76 +226,28 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
     this.advancedForm.controls.expression.valueChanges.subscribe(next => this.computeAdvancedExpression(next));
   }
 
-  private computeMinutesCron(state: any) {
-    this.cron = `${this.isCronFlavorQuartz ? state.seconds : ''} 0/${state.minutes} * 1/1 * ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
+  /*
+ * ControlValueAccessor
+ */
+  public onChange = (_: any) => {
+  };
+  public onTouched = () => {
+  };
+
+  public writeValue(obj: string): void {
+    this.handleModelChange(obj);
   }
 
-  private computeHourlyCron(state: any) {
-    this.cron = `${this.isCronFlavorQuartz ? state.seconds : ''} ${state.minutes} 0/${state.hours} 1/1 * ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
+  public registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
-  private computeDailyCron(state: any) {
-    switch (state.subTab) {
-      case 'everyDays':
-        this.cron = `${this.isCronFlavorQuartz ? state.everyDays.seconds : ''} ${state.everyDays.minutes} ${this.hourToCron(state.everyDays.hours, state.everyDays.hourType)} 1/${state.everyDays.days} * ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
-        break;
-      case 'everyWeekDay':
-        this.cron = `${this.isCronFlavorQuartz ? state.everyWeekDay.seconds : ''} ${state.everyWeekDay.minutes} ${this.hourToCron(state.everyWeekDay.hours, state.everyWeekDay.hourType)} ${this.monthDayDefaultChar} * MON-FRI ${this.yearDefaultChar}`.trim();
-        break;
-      default:
-        throw new Error('Invalid cron daily subtab selection');
-    }
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
+  public registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
-  private computeWeeklyCron(state: any) {
-    const days = this.selectOptions.days
-      .reduce((acc, day) => state[day] ? acc.concat([day]) : acc, [])
-      .join(',');
-    this.cron = `${this.isCronFlavorQuartz ? state.seconds : ''} ${state.minutes} ${this.hourToCron(state.hours, state.hourType)} ${this.monthDayDefaultChar} * ${days} ${this.yearDefaultChar}`.trim();
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
-  }
-
-  private computeMonthlyCron(state: any) {
-    switch (state.subTab) {
-      case 'specificDay':
-        this.cron = `${this.isCronFlavorQuartz ? state.specificDay.seconds : ''} ${state.specificDay.minutes} ${this.hourToCron(state.specificDay.hours, state.specificDay.hourType)} ${state.specificDay.day} 1/${state.specificDay.months} ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
-        break;
-      case 'specificWeekDay':
-        this.cron = `${this.isCronFlavorQuartz ? state.specificWeekDay.seconds : ''} ${state.specificWeekDay.minutes} ${this.hourToCron(state.specificWeekDay.hours, state.specificWeekDay.hourType)} ${this.monthDayDefaultChar} 1/${state.specificWeekDay.months} ${state.specificWeekDay.day}${state.specificWeekDay.monthWeek} ${this.yearDefaultChar}`.trim();
-        break;
-      default:
-        throw new Error('Invalid cron montly subtab selection');
-    }
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
-  }
-
-  private computeYearlyCron(state: any) {
-    switch (state.subTab) {
-      case 'specificMonthDay':
-        this.cron = `${this.isCronFlavorQuartz ? state.specificMonthDay.seconds : ''} ${state.specificMonthDay.minutes} ${this.hourToCron(state.specificMonthDay.hours, state.specificMonthDay.hourType)} ${state.specificMonthDay.day} ${state.specificMonthDay.month} ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
-        break;
-      case 'specificMonthWeek':
-        this.cron = `${this.isCronFlavorQuartz ? state.specificMonthWeek.seconds : ''} ${state.specificMonthWeek.minutes} ${this.hourToCron(state.specificMonthWeek.hours, state.specificMonthWeek.hourType)} ${this.monthDayDefaultChar} ${state.specificMonthWeek.month} ${state.specificMonthWeek.day}${state.specificMonthWeek.monthWeek} ${this.yearDefaultChar}`.trim();
-        break;
-      default:
-        throw new Error('Invalid cron yearly subtab selection');
-    }
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
-  }
-
-  private computeAdvancedExpression(expression: any) {
-    this.cron = expression;
-    this.cronForm.setValue(this.cron);
-    this.onChange(this.cron);
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   public dayDisplay(day: string): string {
@@ -322,22 +271,6 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
       return 'First Weekday';
     } else {
       return `${month}${this.getOrdinalSuffix(month)}`;
-    }
-  }
-
-  private getAmPmHour(hour: number) {
-    return this.options.use24HourTime ? hour : (hour + 11) % 12 + 1;
-  }
-
-  private getHourType(hour: number) {
-    return this.options.use24HourTime ? undefined : (hour >= 12 ? 'PM' : 'AM');
-  }
-
-  private hourToCron(hour: number, hourType: string) {
-    if (this.options.use24HourTime) {
-      return hour;
-    } else {
-      return hourType === 'AM' ? (hour === 12 ? 0 : hour) : (hour === 12 ? 12 : hour + 12);
     }
   }
 
@@ -504,8 +437,8 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
       this.monthlyForm.patchValue({
         subTab: 'specificWeekDay',
         specificWeekDay: {
-          monthWeek: monthWeek,
-          day: day,
+          monthWeek,
+          day,
           months: this.state.monthly.specificWeekDay.months,
           hours: this.state.monthly.specificWeekDay.hours,
           minutes: this.state.monthly.specificWeekDay.minutes,
@@ -579,6 +512,111 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
     }
 
     // this._cd.markForCheck();
+  }
+
+  private computeMinutesCron(state: any) {
+    this.cron = `${this.isCronFlavorQuartz ? state.seconds : ''} 
+    0/${state.minutes} * 1/1 * ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private computeHourlyCron(state: any) {
+    this.cron = `${this.isCronFlavorQuartz ? state.seconds : ''} ${state.minutes} 
+    0/${state.hours} 1/1 * ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private computeDailyCron(state: any) {
+    switch (state.subTab) {
+      case 'everyDays':
+        this.cron = `${this.isCronFlavorQuartz ? state.everyDays.seconds : ''} 
+        ${state.everyDays.minutes} ${this.hourToCron(state.everyDays.hours, state.everyDays.hourType)} 
+        1/${state.everyDays.days} * ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+        break;
+      case 'everyWeekDay':
+        this.cron = `${this.isCronFlavorQuartz ? state.everyWeekDay.seconds : ''} 
+        ${state.everyWeekDay.minutes} ${this.hourToCron(state.everyWeekDay.hours, state.everyWeekDay.hourType)} 
+        ${this.monthDayDefaultChar} * MON-FRI ${this.yearDefaultChar}`.trim();
+        break;
+      default:
+        throw new Error('Invalid cron daily subtab selection');
+    }
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private computeWeeklyCron(state: any) {
+    const days = this.selectOptions.days
+      .reduce((acc, day) => state[day] ? acc.concat([day]) : acc, [])
+      .join(',');
+    this.cron = `${this.isCronFlavorQuartz ? state.seconds : ''} ${state.minutes} 
+    ${this.hourToCron(state.hours, state.hourType)} ${this.monthDayDefaultChar} * ${days} ${this.yearDefaultChar}`.trim();
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private computeMonthlyCron(state: any) {
+    switch (state.subTab) {
+      case 'specificDay':
+        this.cron = `${this.isCronFlavorQuartz ? state.specificDay.seconds : ''} 
+        ${state.specificDay.minutes} ${this.hourToCron(state.specificDay.hours, state.specificDay.hourType)} 
+        ${state.specificDay.day} 1/${state.specificDay.months} ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+        break;
+      case 'specificWeekDay':
+        this.cron = `${this.isCronFlavorQuartz ? state.specificWeekDay.seconds : ''} 
+        ${state.specificWeekDay.minutes} ${this.hourToCron(state.specificWeekDay.hours, state.specificWeekDay.hourType)} 
+        ${this.monthDayDefaultChar} 1/${state.specificWeekDay.months} ${state.specificWeekDay.day}${state.specificWeekDay.monthWeek} 
+        ${this.yearDefaultChar}`.trim();
+        break;
+      default:
+        throw new Error('Invalid cron montly subtab selection');
+    }
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private computeYearlyCron(state: any) {
+    switch (state.subTab) {
+      case 'specificMonthDay':
+        this.cron = `${this.isCronFlavorQuartz ? state.specificMonthDay.seconds : ''} 
+        ${state.specificMonthDay.minutes} ${this.hourToCron(state.specificMonthDay.hours, state.specificMonthDay.hourType)} 
+        ${state.specificMonthDay.day} ${state.specificMonthDay.month} ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+        break;
+      case 'specificMonthWeek':
+        this.cron = `${this.isCronFlavorQuartz ? state.specificMonthWeek.seconds : ''} 
+        ${state.specificMonthWeek.minutes} ${this.hourToCron(state.specificMonthWeek.hours, state.specificMonthWeek.hourType)} 
+        ${this.monthDayDefaultChar} ${state.specificMonthWeek.month} ${state.specificMonthWeek.day}${state.specificMonthWeek.monthWeek} 
+        ${this.yearDefaultChar}`.trim();
+        break;
+      default:
+        throw new Error('Invalid cron yearly subtab selection');
+    }
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private computeAdvancedExpression(expression: any) {
+    this.cron = expression;
+    this.cronForm.setValue(this.cron);
+    this.onChange(this.cron);
+  }
+
+  private getAmPmHour(hour: number) {
+    return this.options.use24HourTime ? hour : (hour + 11) % 12 + 1;
+  }
+
+  private getHourType(hour: number) {
+    return this.options.use24HourTime ? undefined : (hour >= 12 ? 'PM' : 'AM');
+  }
+
+  private hourToCron(hour: number, hourType: string) {
+    if (this.options.use24HourTime) {
+      return hour;
+    } else {
+      return hourType === 'AM' ? (hour === 12 ? 0 : hour) : (hour === 12 ? 12 : hour + 12);
+    }
   }
 
   private cronIsValid(cron: string): boolean {
@@ -768,29 +806,4 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
       this.tabs.push('advanced');
     }
   }
-
-  /*
-   * ControlValueAccessor
-   */
-  public onChange = (_: any) => {
-  };
-  public onTouched = () => {
-  };
-
-  public writeValue(obj: string): void {
-    this.handleModelChange(obj);
-  }
-
-  public registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  public registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  public setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
 }

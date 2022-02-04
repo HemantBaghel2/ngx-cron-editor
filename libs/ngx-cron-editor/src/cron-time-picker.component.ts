@@ -32,14 +32,11 @@ export class TimePickerComponent {
   public seconds = [...range(0, 59) ];
   public hourTypes = ['AM', 'PM'];
 
+  constructor(public parent: ControlContainer) {}
+
   get hours(): number[] {
     return this.use24HourTime ? [... range(0, 23)] : [... range(0, 12)];
   }
-
-  constructor(public parent: ControlContainer) {}
-
-
-
 }
 
 
