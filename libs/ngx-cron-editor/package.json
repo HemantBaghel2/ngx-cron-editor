@@ -1,8 +1,8 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
-  "description": "A cron expression generator for Angular 12+",
+  "description": "A cron expression generator for Angular 13+",
   "name": "@winarg/ngx-cron-editor",
-  "version": "0.8.6",
+  "version": "0.9.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/winarg/ngx-cron-editor"
@@ -28,16 +28,16 @@
   },
   "homepage": "https://github.com/winarg/ngx-cron-editor",
   "peerDependencies": {
-    "@angular/core": "~12.2.11",
-    "@angular/animations": "~12.2.11",
-    "@angular/common": "~12.2.11",
-    "@angular/compiler": "~12.2.11",
-    "@angular/forms": "~12.2.11",
-    "@angular/platform-browser": "~12.2.11",
-    "@angular/platform-browser-dynamic": "~12.2.11",
-    "@angular/router": "~12.2.11",
-    "@angular/material": "^12.2.11",
-    "rxjs": "~7.4.0",
+    "@angular/core": "~13.2.1",
+    "@angular/animations": "~13.2.1",
+    "@angular/common": "~13.2.1",
+    "@angular/compiler": "~13.2.1",
+    "@angular/forms": "~13.2.1",
+    "@angular/platform-browser": "~13.2.1",
+    "@angular/platform-browser-dynamic": "~13.2.1",
+    "@angular/router": "~13.2.1",
+    "@angular/material": "^13.2.1",
+    "rxjs": "~7.5.2",
     "zone.js": "~0.11.4"
   },
   "ngPackage": {
