@@ -43,7 +43,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -100,18 +99,6 @@
               "apps/demo/src/assets"
             ]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/demo/src/tsconfig.app.json",
-              "apps/demo/src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -133,16 +120,6 @@
             }
           },
           "styles": ["libs/ngx-cron-editor/src/cron-editor-theme.scss"]
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/ngx-cron-editor/tsconfig.lib.json",
-              "libs/ngx-cron-editor/tsconfig.spec.json"
-            ],
-            "exclude": []
-          }
         }
       }
     }
