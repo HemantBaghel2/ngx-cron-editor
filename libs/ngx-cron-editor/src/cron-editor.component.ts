@@ -46,6 +46,11 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
 
   public cronForm: FormControl;
 
+  public specificDayForm: FormGroup;
+  public specificWeekDayForm: FormGroup;
+  public specificMonthDayForm: FormGroup;
+  public specificMonthWeekForm: FormGroup;
+
   public minutesForm: FormGroup;
   public hourlyForm: FormGroup;
   public dailyForm: FormGroup;
@@ -224,6 +229,26 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
       expression: [this.isCronFlavorQuartz ? '0 15 10 L-2 * ? *' : '15 10 2 * *']
     });
     this.advancedForm.controls.expression.valueChanges.subscribe(next => this.computeAdvancedExpression(next));
+
+    this.specificDayForm = this.fb.group({
+      hours: [1],
+      minutes: [0]
+    });
+
+    this.specificWeekDayForm = this.fb.group({
+      hours: [1],
+      minutes: [0]
+    });
+
+    this.specificMonthDayForm = this.fb.group({
+      hours: [1],
+      minutes: [0]
+    });
+
+    this.specificMonthWeekForm = this.fb.group({
+      hours: [1],
+      minutes: [0]
+    });
   }
 
   /*
@@ -563,12 +588,16 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
         this.cron = `${this.isCronFlavorQuartz ? state.specificDay.seconds : ''} 
         ${state.specificDay.minutes} ${this.hourToCron(state.specificDay.hours, state.specificDay.hourType)} 
         ${state.specificDay.day} 1/${state.specificDay.months} ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+
+        this.specificDayForm = this.monthlyForm.controls.specificDay as FormGroup;
         break;
       case 'specificWeekDay':
         this.cron = `${this.isCronFlavorQuartz ? state.specificWeekDay.seconds : ''} 
         ${state.specificWeekDay.minutes} ${this.hourToCron(state.specificWeekDay.hours, state.specificWeekDay.hourType)} 
         ${this.monthDayDefaultChar} 1/${state.specificWeekDay.months} ${state.specificWeekDay.day}${state.specificWeekDay.monthWeek} 
         ${this.yearDefaultChar}`.trim();
+
+        this.specificWeekDayForm = this.monthlyForm.controls.specificWeekDay as FormGroup;
         break;
       default:
         throw new Error('Invalid cron montly subtab selection');
@@ -583,12 +612,16 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
         this.cron = `${this.isCronFlavorQuartz ? state.specificMonthDay.seconds : ''} 
         ${state.specificMonthDay.minutes} ${this.hourToCron(state.specificMonthDay.hours, state.specificMonthDay.hourType)} 
         ${state.specificMonthDay.day} ${state.specificMonthDay.month} ${this.weekDayDefaultChar} ${this.yearDefaultChar}`.trim();
+
+        this.specificMonthDayForm = this.monthlyForm.controls.specificMonthDay as FormGroup;
         break;
       case 'specificMonthWeek':
         this.cron = `${this.isCronFlavorQuartz ? state.specificMonthWeek.seconds : ''} 
         ${state.specificMonthWeek.minutes} ${this.hourToCron(state.specificMonthWeek.hours, state.specificMonthWeek.hourType)} 
         ${this.monthDayDefaultChar} ${state.specificMonthWeek.month} ${state.specificMonthWeek.day}${state.specificMonthWeek.monthWeek} 
         ${this.yearDefaultChar}`.trim();
+
+        this.specificMonthWeekForm = this.monthlyForm.controls.specificMonthWeek as FormGroup;
         break;
       default:
         throw new Error('Invalid cron yearly subtab selection');

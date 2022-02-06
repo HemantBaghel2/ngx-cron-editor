@@ -1,5 +1,5 @@
-﻿import {Component, Input } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+﻿import {Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, FormGroup } from '@angular/forms';
 
 
 export interface TimePickerModel {
@@ -20,7 +20,7 @@ function* range(start: number, end: number) {
   templateUrl: './cron-time-picker.template.html',
   providers: []
 })
-export class TimePickerComponent {
+export class TimePickerComponent implements OnInit {
 
   @Input() public disabled;
   @Input() public use24HourTime = true;
@@ -32,10 +32,17 @@ export class TimePickerComponent {
   public seconds = [...range(0, 59) ];
   public hourTypes = ['AM', 'PM'];
 
-  constructor(public parent: ControlContainer) {}
+  public timeForm: FormGroup;
 
-  get hours(): number[] {
+  constructor(public parent: ControlContainer) {
+  }
+
+  public get hours(): number[] {
     return this.use24HourTime ? [... range(0, 23)] : [... range(0, 12)];
+  }
+
+  public ngOnInit(): void {
+    this.timeForm = this.parent.control as FormGroup;
   }
 }
 
