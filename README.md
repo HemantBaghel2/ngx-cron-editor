@@ -13,7 +13,7 @@ A work-in-progress demo can be found [here](https://stackblitz.com/edit/angular-
 
 1. Install the npm package:
     ```
-    $ npm i ngx-cron-editor -S
+    $ npm i @winarg/ngx-cron-editor -S
     ```
 
 2. Import the module in your own module:

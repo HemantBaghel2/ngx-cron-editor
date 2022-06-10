@@ -26,9 +26,14 @@
 
       <mat-card-content class="demo-card-content">
         <form >
-          <input type="text" [(ngModel)]="txtCron" name="txtCron"/>
-          <button (click)="reload()">Change value</button>
-          <button (click)="formValue()">Get Form Value</button>
+          <mat-form-field appearance="fill">
+            <mat-label>Input</mat-label>
+            <input type="text" [(ngModel)]="txtCron" name="txtCron" matInput/>
+          </mat-form-field>
+          
+          
+          <button mat-raised-button (click)="reload()">Change value</button>
+          <button mat-raised-button (click)="formValue()">Get Form Value</button>
         <cron-editor #cronEditorDemo [formControl]="cronForm" [options]="cronOptions">Cron here...</cron-editor>
         </form>
       </mat-card-content>
