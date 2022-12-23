@@ -1,5 +1,5 @@
 ﻿import {Component, Input, OnInit } from '@angular/core';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 
 
 export interface TimePickerModel {
@@ -32,7 +32,7 @@ export class TimePickerComponent implements OnInit {
   public seconds = [...range(0, 59) ];
   public hourTypes = ['AM', 'PM'];
 
-  public timeForm: FormGroup;
+  public timeForm: UntypedFormGroup;
 
   constructor(public parent: ControlContainer) {
   }
@@ -42,7 +42,7 @@ export class TimePickerComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.timeForm = this.parent.control as FormGroup;
+    this.timeForm = this.parent.control as UntypedFormGroup;
   }
 }
 

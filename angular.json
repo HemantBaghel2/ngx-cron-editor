@@ -109,7 +109,7 @@
       "prefix": "ngx-cron-editor",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/ngx-cron-editor/tsconfig.lib.json",
             "project": "libs/ngx-cron-editor/ng-package.json"
@@ -135,8 +135,10 @@
       }
     }
   },
-  "defaultProject": "ngx-cron-editor",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "analytics": false
   }
 }
