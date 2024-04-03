@@ -1,13 +1,13 @@
 {
   "name": "@winarg/ngx-cron-editor",
-  "description": "A cron expression generator for Angular 15",
+  "description": "A cron expression generator for Angular 16-17",
   "author": "Håvard D. Johansen",
   "contributors": [
     "Claudiu Constantin",
     "Eduardo Sarmiento",
     "Anargyros Roussos"
   ],
-  "version": "0.10.0",
+  "version": "0.10.1",
   "license": "MIT",
   "repository": {
     "type": "git",
