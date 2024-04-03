@@ -1,7 +1,7 @@
 ngx-cron-editor
 ===
 
-An Angular 13-15 component for building cron expressions graphically. It is meant
+An Angular 17 component for building cron expressions graphically. It is meant
 to be used in reactive forms and support Angular Material Design styling.
  
 
