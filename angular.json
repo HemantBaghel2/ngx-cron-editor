@@ -15,12 +15,15 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/apps/demo",
+            "outputPath": {
+              "base": "dist/apps/demo"
+            },
             "index": "apps/demo/src/index.html",
-            "main": "apps/demo/src/main.ts",
-            "polyfills": "apps/demo/src/polyfills.ts",
+            "polyfills": [
+              "apps/demo/src/polyfills.ts"
+            ],
             "tsConfig": "apps/demo/src/tsconfig.packaged.json",
             "assets": [
               "src/favicon.ico",
@@ -30,7 +33,8 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "apps/demo/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "apps/demo/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -45,14 +49,10 @@
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
