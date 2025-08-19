@@ -33,6 +33,7 @@ export class TimePickerComponent implements OnInit {
   public hourTypes = ['AM', 'PM'];
 
   public timeForm: UntypedFormGroup;
+  @Input() formGroup: UntypedFormGroup;
 
   constructor(public parent: ControlContainer) {
   }
@@ -42,7 +43,9 @@ export class TimePickerComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.timeForm = this.parent.control as UntypedFormGroup;
+    // Use the provided formGroup or fall back to parent
+    this.timeForm = this.formGroup || (this.parent.control as UntypedFormGroup);
+    // this.timeForm = this.parent.control as UntypedFormGroup;
   }
 }
 
