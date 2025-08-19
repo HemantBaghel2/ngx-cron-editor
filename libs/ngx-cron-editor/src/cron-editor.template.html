@@ -145,7 +145,7 @@
                   </mat-form-field>
                 </ng-container>
                 <ng-container i18n>at time</ng-container>
-                <cron-time-picker [disabled]="disabled" [formGroup]="specificDayForm"
+                <cron-time-picker [disabled]="disabled" [formGroup]="monthlyForm.get('specificDay')"
                                   [use24HourTime]="options.use24HourTime"
                                   [hideSeconds]="options.hideSeconds || !isCronFlavorQuartz">
                 </cron-time-picker>
@@ -186,7 +186,7 @@
                   </mat-select>
                 </mat-form-field>
                 <ng-container i18n>at time</ng-container>
-                <cron-time-picker [formGroup]="specificWeekDayForm"
+                <cron-time-picker [formGroup]="monthlyForm.get('specificWeekDay')"
                                   [use24HourTime]="options.use24HourTime"
                                   [hideSeconds]="options.hideSeconds || !isCronFlavorQuartz">
                 </cron-time-picker>
