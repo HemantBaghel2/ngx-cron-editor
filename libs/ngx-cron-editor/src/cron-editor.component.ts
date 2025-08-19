@@ -642,8 +642,15 @@ export class CronGenComponent implements OnInit, ControlValueAccessor {
     this.cronForm.setValue(this.cron);
     this.onChange(this.cron);
   }
+  
+  private logFormState() {
+    console.log('Monthly Form Value:', this.monthlyForm.value);
+    console.log('Specific Day Form:', this.monthlyForm.get('specificDay').value);
+    console.log('Specific WeekDay Form:', this.monthlyForm.get('specificWeekDay').value);
+  }
 
   private computeMonthlyCron(state: any) {
+    this.logFormState();
     switch (state.subTab) {
       case 'specificDay':
         this.cron = `${
