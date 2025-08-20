@@ -1,5 +1,5 @@
 {
-  "name": "@hemant/ngx-cron-editor",
+  "name": "ngx-cron-editor-baghel",
   "description": "A Fork of @winarg/ngx-cron-editor with monthly section time cron fix",
   "author": "Håvard D. Johansen",
   "contributors": [
